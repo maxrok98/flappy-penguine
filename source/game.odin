@@ -95,7 +95,7 @@ update :: proc() {
 			vel.y = 400
 		}
 
-		if rl.IsKeyPressed(.SPACE) || rl.IsGestureDetected(.TAP) {
+		if rl.IsKeyPressed(.SPACE) || rl.IsMouseButtonPressed(.LEFT) {
 			vel.y = -200
 			bird_animation.frame_num = 0
 			bird_animation.timer = 0.2
@@ -164,7 +164,7 @@ update :: proc() {
 		}
 
 
-	} else if lost && (rl.IsKeyPressed(.ENTER) || rl.IsGestureDetected(.DOUBLETAP)) {
+	} else if lost && (rl.IsKeyPressed(.ENTER) || rl.IsMouseButtonPressed(.RIGHT)) {
 		pos = 0
 		vel = 0
 		init_pipes(&pipes)
