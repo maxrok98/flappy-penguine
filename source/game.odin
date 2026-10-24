@@ -89,7 +89,7 @@ init :: proc() {
 
 	pipe_texture = rl.LoadTexture("assets/pipe.png")
 	pipe_bottom_texture = rl.LoadTexture("assets/pipe_bottom.png")
-	sky = rl.LoadTexture("assets/sunset.png")
+	sky = rl.LoadTexture("assets/night_sky.png")
 
 	bird_animation = Animation {
 		frame_count = 3,
@@ -204,15 +204,16 @@ update :: proc() {
 
 	rl.ClearBackground(rl.SKYBLUE)
 	sky_source := rl.Rectangle{0, 0, f32(sky.width), f32(sky.height)}
+	sky_dest: rl.Rectangle
+	if f32(sky.width) / f32(sky.height) > f32(rl.GetScreenWidth()) / f32(rl.GetScreenHeight()) {
+		sky_dest.width = f32(sky.width)
+		sky_dest.height = f32(rl.GetScreenHeight())
+	} else {
+		sky_dest.width = f32(rl.GetScreenWidth())
+		sky_dest.height = f32(sky.height)
+	}
 
-	rl.DrawTexturePro(
-		sky,
-		sky_source,
-		{0, 0, f32(rl.GetScreenWidth()), f32(rl.GetScreenHeight())},
-		{0, 0},
-		0,
-		rl.WHITE,
-	)
+	rl.DrawTexturePro(sky, sky_source, sky_dest, {0, 0}, 0, rl.WHITE)
 
 	camera := rl.Camera2D {
 		target   = {pos.x, 0},
@@ -289,15 +290,24 @@ update :: proc() {
 	rl.EndMode2D()
 
 	if !lost {
-		rl.DrawText(rl.TextFormat("Score: %d", score), 0, rl.GetScreenHeight() - 20, 20, rl.GREEN)
+		text := rl.TextFormat("%d", score)
+		text_width := rl.MeasureText(text, 50)
+		//rl.DrawText(, 0, rl.GetScreenHeight() - 20, 20, rl.GREEN)
+		rl.DrawText(
+			text,
+			rl.GetScreenWidth() / 2 - text_width / 2,
+			rl.GetScreenHeight() / 6,
+			50,
+			rl.ORANGE,
+		)
 	} else {
 		text := rl.TextFormat("Score: %d", score)
-		text_width := rl.MeasureText(text, 40)
+		text_width := rl.MeasureText(text, 50)
 		rl.DrawText(
 			text,
 			rl.GetScreenWidth() / 2 - text_width / 2,
 			rl.GetScreenHeight() / 2 - 20,
-			40,
+			50,
 			rl.RED,
 		)
 	}
