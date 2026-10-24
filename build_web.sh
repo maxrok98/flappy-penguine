@@ -34,4 +34,7 @@ emcc -o $OUT_DIR/index.html $files $flags
 
 rm $OUT_DIR/game.wasm.obj
 
+# PWA files: manifest, service worker and icons
+cp source/main_web/manifest.json source/main_web/sw.js source/main_web/icon-*.png $OUT_DIR
+
 echo "Web build created in ${OUT_DIR}"
