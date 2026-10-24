@@ -5,7 +5,7 @@ import "core:c"
 import "core:math/rand"
 
 HEIGHT :: 180
-PIT_HEIGHT :: 60
+PIT_HEIGHT :: 48
 
 Pipe :: struct {
 	pos_x:      i32,
@@ -96,7 +96,7 @@ update :: proc() {
 		}
 
 		if rl.IsKeyPressed(.SPACE) || rl.IsMouseButtonPressed(.LEFT) {
-			vel.y = -200
+			vel.y = -170
 			bird_animation.frame_num = 0
 			bird_animation.timer = 0.2
 			rl.PlaySound(swing_sound)
