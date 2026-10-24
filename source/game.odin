@@ -191,7 +191,7 @@ update :: proc() {
 	camera := rl.Camera2D {
 		target   = {pos.x, 0},
 		offset   = {100, 0},
-		zoom     = f32(rl.GetScreenHeight() / HEIGHT),
+		zoom     = f32(rl.GetScreenHeight()) / HEIGHT,
 		rotation = 0,
 	}
 
