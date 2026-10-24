@@ -89,7 +89,7 @@ init :: proc() {
 
 	pipe_texture = rl.LoadTexture("assets/pipe.png")
 	pipe_bottom_texture = rl.LoadTexture("assets/pipe_bottom.png")
-	sky = rl.LoadTexture("assets/sunset.jpg")
+	sky = rl.LoadTexture("assets/sunset.png")
 
 	bird_animation = Animation {
 		frame_count = 3,
