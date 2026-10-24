@@ -82,6 +82,7 @@ init :: proc() {
 	rl.SetConfigFlags({.WINDOW_RESIZABLE, .VSYNC_HINT})
 	rl.InitWindow(1280, 720, "Odin + Raylib on the web")
 	rl.InitAudioDevice()
+	rl.SetMasterVolume(0.5)
 
 	coin_sound = rl.LoadSound("assets/coin.mp3")
 	swing_sound = rl.LoadSound("assets/swing.mp3")
