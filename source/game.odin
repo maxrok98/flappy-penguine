@@ -1,8 +1,9 @@
 package game
 
-import rl "vendor:raylib"
 import "core:c"
+import "core:math"
 import "core:math/rand"
+import rl "vendor:raylib"
 
 HEIGHT :: 180
 PIT_HEIGHT :: 48
@@ -26,19 +27,45 @@ pipe_texture: rl.Texture
 pipe_bottom_texture: rl.Texture
 sky: rl.Texture
 bird_texture: rl.Texture
-bird_animation : Animation
+bird_animation: Animation
 
 coin_sound: rl.Sound
 swing_sound: rl.Sound
 lost_sound: rl.Sound
 
-pos : rl.Vector2
+pos: rl.Vector2
 vel: rl.Vector2
 pipes: [10]Pipe
 
 last_passed_pipe_x: i32
 score: i32
 lost: bool
+
+debug: bool = false
+
+// Rotated rect (center, half extents, angle in degrees) vs axis-aligned rec.
+check_collision_rotated_rec :: proc(
+	center, half: rl.Vector2,
+	angle_deg: f32,
+	rec: rl.Rectangle,
+) -> bool {
+	rad := angle_deg * rl.DEG2RAD
+	cs, sn := math.cos(rad), math.sin(rad)
+	acs, asn := abs(cs), abs(sn)
+
+	rec_half := rl.Vector2{rec.width / 2, rec.height / 2}
+	d := rl.Vector2{rec.x, rec.y} + rec_half - center
+
+	// World X / Y axes
+	if abs(d.x) > rec_half.x + half.x * acs + half.y * asn do return false
+	if abs(d.y) > rec_half.y + half.x * asn + half.y * acs do return false
+
+	// Bird's rotated axes: (cs, sn) and (-sn, cs)
+	if abs(d.x * cs + d.y * sn) > half.x + rec_half.x * acs + rec_half.y * asn do return false
+	if abs(-d.x * sn + d.y * cs) > half.y + rec_half.x * asn + rec_half.y * acs do return false
+
+	return true
+}
 
 init_pipes :: proc(pipes: ^[10]Pipe) {
 	for &pipe, index in pipes {
@@ -79,6 +106,9 @@ init :: proc() {
 }
 
 update :: proc() {
+	if rl.IsKeyPressed(.D) {
+		debug = !debug
+	}
 	if !lost {
 		if bird_animation.frame_num < 2 {
 			bird_animation.timer -= rl.GetFrameTime()
@@ -131,31 +161,27 @@ update :: proc() {
 		}
 
 		// Check collisions
+		bird_angle := (vel.y - 100) / 6.6
+		bird_center := pos + {8, 8}
+		bird_half := rl.Vector2{6, 3}
 		for pipe in pipes {
-			player_rec := rl.Rectangle {
-				x      = pos.x,
-				y      = pos.y + 3,
-				width  = 16,
-				height = 16 - 6,
-			}
-
 			upper_pipe_rec := rl.Rectangle {
 				x      = f32(pipe.pos_x),
 				y      = f32(pipe.pit_y - (pipe.pit_height / 2) - pipe_texture.height),
-				width  = f32(pipe_texture.width-7),
+				width  = f32(pipe_texture.width - 7),
 				height = f32(pipe_texture.height),
 			}
 			bottom_pipe_rec := rl.Rectangle {
 				x      = f32(pipe.pos_x),
 				y      = f32(pipe.pit_y + (pipe.pit_height / 2)),
-				width  = f32(pipe_texture.width-7),
+				width  = f32(pipe_texture.width - 7),
 				height = f32(pipe_texture.height),
 			}
-			if rl.CheckCollisionRecs(player_rec, upper_pipe_rec) ||
-				rl.CheckCollisionRecs(player_rec, bottom_pipe_rec) {
-					lost = true
-					rl.PlaySound(lost_sound)
-				}
+			if check_collision_rotated_rec(bird_center, bird_half, bird_angle, upper_pipe_rec) ||
+			   check_collision_rotated_rec(bird_center, bird_half, bird_angle, bottom_pipe_rec) {
+				lost = true
+				rl.PlaySound(lost_sound)
+			}
 		}
 
 		if pos.y < 0 || pos.y > HEIGHT - 16 {
@@ -183,9 +209,9 @@ update :: proc() {
 		sky,
 		sky_source,
 		{0, 0, f32(rl.GetScreenWidth()), f32(rl.GetScreenHeight())},
-					  {0, 0},
-					  0,
-					  rl.WHITE,
+		{0, 0},
+		0,
+		rl.WHITE,
 	)
 
 	camera := rl.Camera2D {
@@ -214,7 +240,7 @@ update :: proc() {
 
 	angle := (vel.y - 100) / 6.6
 	rl.DrawTexturePro(bird_texture, source, dest, {8, 8}, angle, rl.WHITE)
-	//rl.DrawRectangleV(pos, {16, 16}, {255, 0, 0, 100})
+	if debug {rl.DrawRectanglePro({pos.x + 8, pos.y + 8, 12, 6}, {6, 3}, angle, {255, 0, 0, 100})}
 	//rl.DrawCircleV(ellipse_dest, 16, {255, 0, 0, 100})
 
 	for pipe in pipes {
@@ -229,18 +255,11 @@ update :: proc() {
 		upper_pipe_dest := rl.Rectangle {
 			x      = f32(pipe.pos_x),
 			y      = f32(pipe.pit_y - (pipe.pit_height / 2) - pipe_texture.height),
-			width  = f32(pipe_texture.width-7),
+			width  = f32(pipe_texture.width - 7),
 			height = f32(pipe_texture.height),
 		}
 
-		rl.DrawTexturePro(
-			pipe_texture,
-			upper_pipe_source,
-			upper_pipe_dest,
-			{0, 0},
-			0,
-			rl.WHITE,
-		)
+		rl.DrawTexturePro(pipe_texture, upper_pipe_source, upper_pipe_dest, {0, 0}, 0, rl.WHITE)
 
 		bottom_pipe_source := rl.Rectangle {
 			x      = 0,
@@ -252,7 +271,7 @@ update :: proc() {
 		bottom_pipe_dest := rl.Rectangle {
 			x      = f32(pipe.pos_x),
 			y      = f32(pipe.pit_y + (pipe.pit_height / 2)),
-			width  = f32(pipe_bottom_texture.width-7),
+			width  = f32(pipe_bottom_texture.width - 7),
 			height = f32(pipe_bottom_texture.height),
 		}
 
@@ -270,22 +289,16 @@ update :: proc() {
 	rl.EndMode2D()
 
 	if !lost {
-		rl.DrawText(
-			rl.TextFormat("Score: %d", score),
-					0,
-			  rl.GetScreenHeight() - 20,
-					20,
-			  rl.GREEN,
-		)
+		rl.DrawText(rl.TextFormat("Score: %d", score), 0, rl.GetScreenHeight() - 20, 20, rl.GREEN)
 	} else {
 		text := rl.TextFormat("Score: %d", score)
 		text_width := rl.MeasureText(text, 40)
 		rl.DrawText(
 			text,
 			rl.GetScreenWidth() / 2 - text_width / 2,
-					rl.GetScreenHeight() / 2 - 20,
-					40,
-			  rl.RED,
+			rl.GetScreenHeight() / 2 - 20,
+			40,
+			rl.RED,
 		)
 	}
 

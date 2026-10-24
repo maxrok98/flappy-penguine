@@ -76,7 +76,7 @@ var ENVIRONMENT_IS_SHELL = !ENVIRONMENT_IS_WEB && !ENVIRONMENT_IS_NODE && !ENVIR
 
 // --pre-jses are emitted after the Module integration code, so that they can
 // refer to Module (if they choose; they can also define Module)
-// include: /tmp/tmpb41ydecd.js
+// include: /tmp/tmpgol8b3xe.js
 
   if (!Module['expectedDataFileDownloads']) Module['expectedDataFileDownloads'] = 0;
   Module['expectedDataFileDownloads']++;
@@ -204,21 +204,21 @@ Module['FS_createPath']("/", "assets", true, true);
 
   })();
 
-// end include: /tmp/tmpb41ydecd.js
-// include: /tmp/tmpo4uye4ap.js
+// end include: /tmp/tmpgol8b3xe.js
+// include: /tmp/tmp8hl0n34n.js
 
     // All the pre-js content up to here must remain later on, we need to run
     // it.
     if ((typeof ENVIRONMENT_IS_WASM_WORKER !== 'undefined' && ENVIRONMENT_IS_WASM_WORKER) || (typeof ENVIRONMENT_IS_PTHREAD !== 'undefined' && ENVIRONMENT_IS_PTHREAD) || (typeof ENVIRONMENT_IS_AUDIO_WORKLET !== 'undefined' && ENVIRONMENT_IS_AUDIO_WORKLET)) Module['preRun'] = [];
     var necessaryPreJSTasks = Module['preRun'].slice();
-  // end include: /tmp/tmpo4uye4ap.js
-// include: /tmp/tmpqglr8ary.js
+  // end include: /tmp/tmp8hl0n34n.js
+// include: /tmp/tmputowbqvo.js
 
     if (!Module['preRun']) throw 'Module.preRun should exist because file support used it; did a pre-js delete it?';
     necessaryPreJSTasks.forEach((task) => {
       if (Module['preRun'].indexOf(task) < 0) throw 'All preRun tasks that exist before user pre-js code should remain after; did you replace Module or modify Module.preRun?';
     });
-  // end include: /tmp/tmpqglr8ary.js
+  // end include: /tmp/tmputowbqvo.js
 
 
 var programArgs = [];
@@ -4054,6 +4054,12 @@ var stringToUTF8Array = (str, heap, outIdx, maxBytesToWrite) => {
       return 0;
     ;
   }
+
+  function _cos(...args
+  ) {
+  abort('missing function: cos');
+  }
+  _cos.stub = true;
 
   var readEmAsmArgsArray = [];
   
@@ -9066,6 +9072,12 @@ var stringToUTF8Array = (str, heap, outIdx, maxBytesToWrite) => {
   }
   _rand_bytes.stub = true;
 
+  function _sin(...args
+  ) {
+  abort('missing function: sin');
+  }
+  _sin.stub = true;
+
   function _write(...args
   ) {
   abort('missing function: write');
@@ -9780,6 +9792,8 @@ var wasmImports = {
   /** @export */
   clock_time_get: _clock_time_get,
   /** @export */
+  cos: _cos,
+  /** @export */
   emscripten_asm_const_double: _emscripten_asm_const_double,
   /** @export */
   emscripten_asm_const_int: _emscripten_asm_const_int,
@@ -10321,6 +10335,8 @@ var wasmImports = {
   glfwWindowHint: _glfwWindowHint,
   /** @export */
   rand_bytes: _rand_bytes,
+  /** @export */
+  sin: _sin,
   /** @export */
   write: _write
 };
