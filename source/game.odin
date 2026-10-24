@@ -88,7 +88,7 @@ update :: proc() {
 			}
 		}
 
-		vel.x = 50
+		vel.x = 57
 
 		vel.y += 500 * rl.GetFrameTime()
 		if vel.y > 400 {
@@ -142,13 +142,13 @@ update :: proc() {
 			upper_pipe_rec := rl.Rectangle {
 				x      = f32(pipe.pos_x),
 				y      = f32(pipe.pit_y - (pipe.pit_height / 2) - pipe_texture.height),
-				width  = f32(pipe_texture.width),
+				width  = f32(pipe_texture.width-7),
 				height = f32(pipe_texture.height),
 			}
 			bottom_pipe_rec := rl.Rectangle {
 				x      = f32(pipe.pos_x),
 				y      = f32(pipe.pit_y + (pipe.pit_height / 2)),
-				width  = f32(pipe_texture.width),
+				width  = f32(pipe_texture.width-7),
 				height = f32(pipe_texture.height),
 			}
 			if rl.CheckCollisionRecs(player_rec, upper_pipe_rec) ||
@@ -229,7 +229,7 @@ update :: proc() {
 		upper_pipe_dest := rl.Rectangle {
 			x      = f32(pipe.pos_x),
 			y      = f32(pipe.pit_y - (pipe.pit_height / 2) - pipe_texture.height),
-			width  = f32(pipe_texture.width),
+			width  = f32(pipe_texture.width-7),
 			height = f32(pipe_texture.height),
 		}
 
@@ -252,7 +252,7 @@ update :: proc() {
 		bottom_pipe_dest := rl.Rectangle {
 			x      = f32(pipe.pos_x),
 			y      = f32(pipe.pit_y + (pipe.pit_height / 2)),
-			width  = f32(pipe_bottom_texture.width),
+			width  = f32(pipe_bottom_texture.width-7),
 			height = f32(pipe_bottom_texture.height),
 		}
 
