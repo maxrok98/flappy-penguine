@@ -80,7 +80,7 @@ init_pipes :: proc(pipes: ^[10]Pipe) {
 
 init :: proc() {
 	run = true
-	rl.SetConfigFlags({.WINDOW_RESIZABLE, .VSYNC_HINT})
+	rl.SetConfigFlags({.WINDOW_RESIZABLE, .VSYNC_HINT, .MSAA_4X_HINT})
 	rl.InitWindow(1280, 720, "Odin + Raylib on the web")
 	rl.InitAudioDevice()
 	rl.SetMasterVolume(0.5)
@@ -300,15 +300,15 @@ update :: proc() {
 		rl.DrawText(
 			text,
 			rl.GetScreenWidth() / 2 - text_width / 2,
-			rl.GetScreenHeight() / 2 - 20,
+			rl.GetScreenHeight() / 2 - 70,
 			50,
 			rl.RED,
 		)
 
-		reset_zoom := 8
+		reset_zoom := 7
 		reset_dest := rl.Rectangle {
 			f32(rl.GetScreenWidth()) / 2 - f32(reset_texture.width) * f32(reset_zoom) / 2,
-			f32(rl.GetScreenHeight()) / 2 + 50,
+			f32(rl.GetScreenHeight()) / 2,
 			f32(reset_texture.width) * f32(reset_zoom),
 			f32(reset_texture.height) * f32(reset_zoom),
 		}

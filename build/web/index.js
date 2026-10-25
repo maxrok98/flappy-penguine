@@ -76,7 +76,7 @@ var ENVIRONMENT_IS_SHELL = !ENVIRONMENT_IS_WEB && !ENVIRONMENT_IS_NODE && !ENVIR
 
 // --pre-jses are emitted after the Module integration code, so that they can
 // refer to Module (if they choose; they can also define Module)
-// include: /tmp/tmpxxe7vlvk.js
+// include: /tmp/tmpknf30bjq.js
 
   if (!Module['expectedDataFileDownloads']) Module['expectedDataFileDownloads'] = 0;
   Module['expectedDataFileDownloads']++;
@@ -200,25 +200,25 @@ Module['FS_createPath']("/", "assets", true, true);
     }
 
     }
-    loadPackage({"files": [{"filename": "/assets/264-2642136_reset-button-restart-button-pixel-art-8-bit.png", "start": 0, "end": 5648}, {"filename": "/assets/bird-sheet.png", "start": 5648, "end": 5989}, {"filename": "/assets/bird.png", "start": 5989, "end": 6250}, {"filename": "/assets/coin.mp3", "start": 6250, "end": 17117}, {"filename": "/assets/lost.mp3", "start": 17117, "end": 33612}, {"filename": "/assets/night_sky.png", "start": 33612, "end": 47521}, {"filename": "/assets/night_sky_original.jpg", "start": 47521, "end": 92314}, {"filename": "/assets/pipe.png", "start": 92314, "end": 92570}, {"filename": "/assets/pipe_bottom.png", "start": 92570, "end": 92822}, {"filename": "/assets/reset_button.png", "start": 92822, "end": 93044}, {"filename": "/assets/sky.png", "start": 93044, "end": 447600}, {"filename": "/assets/sunset.png", "start": 447600, "end": 1112154}, {"filename": "/assets/swing.mp3", "start": 1112154, "end": 1115306}, {"filename": "/assets/swing1.mp3", "start": 1115306, "end": 1135829}], "remote_package_size": 1135829});
+    loadPackage({"files": [{"filename": "/assets/bird-sheet.png", "start": 0, "end": 341}, {"filename": "/assets/bird.png", "start": 341, "end": 602}, {"filename": "/assets/coin.mp3", "start": 602, "end": 11469}, {"filename": "/assets/lost.mp3", "start": 11469, "end": 27964}, {"filename": "/assets/night_sky.png", "start": 27964, "end": 41873}, {"filename": "/assets/night_sky_original.jpg", "start": 41873, "end": 86666}, {"filename": "/assets/pipe.png", "start": 86666, "end": 86922}, {"filename": "/assets/pipe_bottom.png", "start": 86922, "end": 87174}, {"filename": "/assets/reset_button.png", "start": 87174, "end": 87396}, {"filename": "/assets/sky.png", "start": 87396, "end": 441952}, {"filename": "/assets/sunset.png", "start": 441952, "end": 1106506}, {"filename": "/assets/swing.mp3", "start": 1106506, "end": 1109658}, {"filename": "/assets/swing1.mp3", "start": 1109658, "end": 1130181}], "remote_package_size": 1130181});
 
   })();
 
-// end include: /tmp/tmpxxe7vlvk.js
-// include: /tmp/tmp2wxo96vh.js
+// end include: /tmp/tmpknf30bjq.js
+// include: /tmp/tmp435z7owi.js
 
     // All the pre-js content up to here must remain later on, we need to run
     // it.
     if ((typeof ENVIRONMENT_IS_WASM_WORKER !== 'undefined' && ENVIRONMENT_IS_WASM_WORKER) || (typeof ENVIRONMENT_IS_PTHREAD !== 'undefined' && ENVIRONMENT_IS_PTHREAD) || (typeof ENVIRONMENT_IS_AUDIO_WORKLET !== 'undefined' && ENVIRONMENT_IS_AUDIO_WORKLET)) Module['preRun'] = [];
     var necessaryPreJSTasks = Module['preRun'].slice();
-  // end include: /tmp/tmp2wxo96vh.js
-// include: /tmp/tmpj1sgymdu.js
+  // end include: /tmp/tmp435z7owi.js
+// include: /tmp/tmp269z3pa6.js
 
     if (!Module['preRun']) throw 'Module.preRun should exist because file support used it; did a pre-js delete it?';
     necessaryPreJSTasks.forEach((task) => {
       if (Module['preRun'].indexOf(task) < 0) throw 'All preRun tasks that exist before user pre-js code should remain after; did you replace Module or modify Module.preRun?';
     });
-  // end include: /tmp/tmpj1sgymdu.js
+  // end include: /tmp/tmp269z3pa6.js
 
 
 var programArgs = [];
