@@ -27,6 +27,7 @@ pipe_texture: rl.Texture
 pipe_bottom_texture: rl.Texture
 sky: rl.Texture
 bird_texture: rl.Texture
+reset_texture: rl.Texture
 bird_animation: Animation
 
 coin_sound: rl.Sound
@@ -91,6 +92,7 @@ init :: proc() {
 	pipe_texture = rl.LoadTexture("assets/pipe.png")
 	pipe_bottom_texture = rl.LoadTexture("assets/pipe_bottom.png")
 	sky = rl.LoadTexture("assets/night_sky.png")
+	reset_texture = rl.LoadTexture("assets/reset_button.png")
 
 	bird_animation = Animation {
 		frame_count = 3,
@@ -190,15 +192,6 @@ update :: proc() {
 			rl.PlaySound(lost_sound)
 		}
 
-
-	} else if lost && (rl.IsKeyPressed(.ENTER) || rl.IsMouseButtonPressed(.RIGHT)) {
-		pos = 0
-		vel = 0
-		init_pipes(&pipes)
-
-		last_passed_pipe_x = 0
-		score = 0
-		lost = false
 	}
 
 	rl.BeginDrawing()
@@ -311,6 +304,35 @@ update :: proc() {
 			50,
 			rl.RED,
 		)
+
+		reset_zoom := 8
+		reset_dest := rl.Rectangle {
+			f32(rl.GetScreenWidth()) / 2 - f32(reset_texture.width) * f32(reset_zoom) / 2,
+			f32(rl.GetScreenHeight()) / 2 + 50,
+			f32(reset_texture.width) * f32(reset_zoom),
+			f32(reset_texture.height) * f32(reset_zoom),
+		}
+
+		rl.DrawTexturePro(
+			reset_texture,
+			{0, 0, f32(reset_texture.width), f32(reset_texture.height)},
+			reset_dest,
+			{0, 0},
+			0,
+			rl.WHITE,
+		)
+		if (rl.IsMouseButtonPressed(.LEFT) &&
+			   rl.CheckCollisionPointRec(rl.GetMousePosition(), reset_dest)) ||
+		   rl.IsKeyPressed(.ENTER) ||
+		   rl.IsMouseButtonPressed(.RIGHT) {
+			pos = 0
+			vel = 0
+			init_pipes(&pipes)
+
+			last_passed_pipe_x = 0
+			score = 0
+			lost = false
+		}
 	}
 
 	rl.EndDrawing()
