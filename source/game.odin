@@ -207,11 +207,11 @@ update :: proc() {
 	sky_source := rl.Rectangle{0, 0, f32(sky.width), f32(sky.height)}
 	sky_dest: rl.Rectangle
 	if f32(sky.width) / f32(sky.height) > f32(rl.GetScreenWidth()) / f32(rl.GetScreenHeight()) {
-		sky_dest.width = f32(sky.width)
 		sky_dest.height = f32(rl.GetScreenHeight())
+		sky_dest.width = f32(sky.width) * (f32(rl.GetScreenHeight()) / f32(sky.height))
 	} else {
 		sky_dest.width = f32(rl.GetScreenWidth())
-		sky_dest.height = f32(sky.height)
+		sky_dest.height = f32(sky.height) * (f32(rl.GetScreenWidth()) / f32(sky.width))
 	}
 
 	rl.DrawTexturePro(sky, sky_source, sky_dest, {0, 0}, 0, rl.WHITE)
