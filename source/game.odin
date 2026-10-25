@@ -29,6 +29,7 @@ sky: rl.Texture
 bird_texture: rl.Texture
 reset_texture: rl.Texture
 bird_animation: Animation
+layers: [4]Layer
 
 coin_sound: rl.Sound
 swing_sound: rl.Sound
@@ -78,6 +79,12 @@ init_pipes :: proc(pipes: ^[10]Pipe) {
 	}
 }
 
+Layer :: struct {
+	texture: rl.Texture2D,
+	pos:     rl.Vector2,
+	speed:   f32,
+}
+
 init :: proc() {
 	run = true
 	rl.SetConfigFlags({.WINDOW_RESIZABLE, .VSYNC_HINT, .MSAA_4X_HINT})
@@ -91,8 +98,15 @@ init :: proc() {
 
 	pipe_texture = rl.LoadTexture("assets/pipe.png")
 	pipe_bottom_texture = rl.LoadTexture("assets/pipe_bottom.png")
-	sky = rl.LoadTexture("assets/night_sky.png")
+	sky = rl.LoadTexture("assets/night_sky/sky.png")
 	reset_texture = rl.LoadTexture("assets/reset_button.png")
+
+	layers = [4]Layer {
+		{texture = rl.LoadTexture("assets/night_sky/stars.png"), speed = 5},
+		{texture = rl.LoadTexture("assets/night_sky/clouds_far.png"), speed = 10},
+		{texture = rl.LoadTexture("assets/night_sky/clouds_mid.png"), speed = 20},
+		{texture = rl.LoadTexture("assets/night_sky/clouds_front.png"), speed = 30},
+	}
 
 	bird_animation = Animation {
 		frame_count = 3,
@@ -200,14 +214,36 @@ update :: proc() {
 	sky_source := rl.Rectangle{0, 0, f32(sky.width), f32(sky.height)}
 	sky_dest: rl.Rectangle
 	if f32(sky.width) / f32(sky.height) > f32(rl.GetScreenWidth()) / f32(rl.GetScreenHeight()) {
-		sky_dest.height = f32(rl.GetScreenHeight())
 		sky_dest.width = f32(sky.width) * (f32(rl.GetScreenHeight()) / f32(sky.height))
+		sky_dest.height = f32(rl.GetScreenHeight())
 	} else {
 		sky_dest.width = f32(rl.GetScreenWidth())
 		sky_dest.height = f32(sky.height) * (f32(rl.GetScreenWidth()) / f32(sky.width))
 	}
 
 	rl.DrawTexturePro(sky, sky_source, sky_dest, {0, 0}, 0, rl.WHITE)
+
+	if !lost {
+		for &layer in layers {
+			layer.pos.x -= layer.speed * rl.GetFrameTime()
+			if layer.pos.x < f32(-sky_dest.width) {
+				layer.pos.x = layer.pos.x + f32(sky_dest.width)
+			}
+		}
+	}
+
+	for layer in layers {
+		layer_source := rl.Rectangle{0, 0, f32(layer.texture.width), f32(layer.texture.height)}
+		layer_dest1 := rl.Rectangle{layer.pos.x, layer.pos.y, sky_dest.width, sky_dest.height}
+		layer_dest2 := rl.Rectangle {
+			layer.pos.x + sky_dest.width,
+			layer.pos.y,
+			sky_dest.width,
+			sky_dest.height,
+		}
+		rl.DrawTexturePro(layer.texture, layer_source, layer_dest1, {0, 0}, 0, rl.WHITE)
+		rl.DrawTexturePro(layer.texture, layer_source, layer_dest2, {0, 0}, 0, rl.WHITE)
+	}
 
 	camera := rl.Camera2D {
 		target   = {pos.x, 0},
